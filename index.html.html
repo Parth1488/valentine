@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffd6e8, #ffeef5);
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      z-index: 10;
+    }
+
+    #yesBtn, #noBtn {
+      padding: 14px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      position: absolute;
+      z-index: 10;
+    }
+
+    #yesBtn {
+      background-color: #ff4d88;
+      color: white;
+      left: 45%;
+      top: 55%;
+    }
+
+    #noBtn {
+      background-color: #cccccc;
+      left: 55%;
+      top: 55%;
+    }
+
+    .float {
+      position: absolute;
+      font-size: 30px;
+      animation: floatUp linear infinite;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh);
+      }
+      to {
+        transform: translateY(-100px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Will you be my Valentine? ❤️</h1>
+
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+
+    function moveNo() {
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("click", moveNo);
+
+    yesBtn.addEventListener("click", () => {
+      document.body.innerHTML = "<h1>Yay! ❤️ You’re my Valentine! 🧸💖</h1>";
+    });
+
+    const emojis = ["❤️", "🧸", "💖", "💕"];
+
+    function createFloat() {
+      const span = document.createElement("span");
+      span.className = "float";
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+      span.style.left = Math.random() * window.innerWidth + "px";
+      span.style.animationDuration = (5 + Math.random() * 5) + "s";
+      span.style.fontSize = (24 + Math.random() * 24) + "px";
+
+      document.body.appendChild(span);
+
+      setTimeout(() => {
+        span.remove();
+      }, 10000);
+    }
+
+    setInterval(createFloat, 500);
+  </script>
+
+</body>
+</html>
