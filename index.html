@@ -19,6 +19,7 @@
     h1 {
       margin-bottom: 40px;
       z-index: 10;
+      text-align: center;
     }
 
     #yesBtn, #noBtn {
@@ -35,21 +36,21 @@
       background-color: #ff4d88;
       color: white;
       left: 45%;
-      top: 55%;
+      top: 60%;
     }
 
     #noBtn {
       background-color: #cccccc;
       left: 55%;
-      top: 55%;
+      top: 60%;
     }
 
-    .float {
+    .float-img {
       position: absolute;
-      font-size: 30px;
       animation: floatUp linear infinite;
-      opacity: 0.9;
+      opacity: 0.95;
       pointer-events: none;
+      transition: transform 0.3s ease;
     }
 
     @keyframes floatUp {
@@ -57,14 +58,14 @@
         transform: translateY(100vh);
       }
       to {
-        transform: translateY(-100px);
+        transform: translateY(-120px);
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>Will you be my Valentine? ❤️</h1>
+  <h1 id="question">Will you be my Valentine? ❤️</h1>
 
   <button id="yesBtn">Yes</button>
   <button id="noBtn">No</button>
@@ -72,6 +73,30 @@
   <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
+    const question = document.getElementById("question");
+
+    // Her images (before Yes)
+    const herImages = [
+      "images/her1.jpg",
+      "images/her2.jpg",
+      "images/her3.jpg",
+      "images/her4.jpg",
+      "images/her5.jpg",
+      "images/her6.jpg"
+    ];
+
+    // Your images together (after Yes)
+    const ourImages = [
+      "images/us1.jpg",
+      "images/us2.jpg",
+      "images/us3.jpg",
+      "images/us4.jpg",
+      "images/us5.jpg",
+      "images/us6.jpg",
+      "images/us7.jpg"
+    ];
+
+    let currentMode = "her"; // "her" or "us"
 
     function moveNo() {
       const maxX = window.innerWidth - noBtn.offsetWidth;
@@ -88,28 +113,45 @@
     noBtn.addEventListener("click", moveNo);
 
     yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = "<h1>Yay! ❤️ You’re my Valentine! 🧸💖</h1>";
+      // Switch to "us" mode
+      currentMode = "us";
+      document.querySelectorAll(".float-img").forEach(img => img.remove());
+      question.innerText = "Yay! ❤️ Us forever 🧸💖";
     });
 
-    const emojis = ["❤️", "🧸", "💖", "💕"];
+    function createFloatingImage() {
+      const img = document.createElement("img");
+      img.className = "float-img";
 
-    function createFloat() {
-      const span = document.createElement("span");
-      span.className = "float";
-      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const sourceArray = currentMode === "her" ? herImages : ourImages;
+      img.src = sourceArray[Math.floor(Math.random() * sourceArray.length)];
 
-      span.style.left = Math.random() * window.innerWidth + "px";
-      span.style.animationDuration = (5 + Math.random() * 5) + "s";
-      span.style.fontSize = (24 + Math.random() * 24) + "px";
+      const size = 80 + Math.random() * 120; // 80px to 200px
+      img.style.width = size + "px";
 
-      document.body.appendChild(span);
+      const x = Math.random() * (window.innerWidth - size);
+      img.style.left = x + "px";
+
+      const duration = 8 + Math.random() * 6; // 8s to 14s
+      img.style.animationDuration = duration + "s";
+
+      const rotation = (Math.random() * 30) - 15; // -15deg to +15deg
+      img.style.transform = "rotate(" + rotation + "deg)";
+
+      document.body.appendChild(img);
 
       setTimeout(() => {
-        span.remove();
-      }, 10000);
+        img.remove();
+      }, duration * 1000);
     }
 
-    setInterval(createFloat, 500);
+    // Start immediately
+    for (let i = 0; i < 10; i++) {
+      setTimeout(createFloatingImage, i * 300);
+    }
+
+    // Keep spawning
+    setInterval(createFloatingImage, 700);
   </script>
 
 </body>
